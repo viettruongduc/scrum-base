@@ -9,6 +9,7 @@ import Select from "react-select";
 
 import Modal from 'react-modal';
 import AddTask from "./AddTask";
+//add somethin
 
 const customStyles = {
 	content: {
@@ -39,11 +40,88 @@ const TasksContainer = () => {
 	const [modalIsOpen, setIsOpen] = React.useState(false);
 	const { register, control, handleSubmit, watch, formState: { errors } } = useForm();
 	const onSubmit = data => console.log(data);
+	let tasks = {
+		pending: {
+			title: "pending",
+			items: [
+				{
+					id: fetchID(),
+					title: "Send the Figma file to Dima",
+					comments: [],
+				},
+			],
+		},
+		ongoing: {
+			title: "ongoing",
+			items: [
+				{
+					id: fetchID(),
+					title: "Review GitHub issues",
+					comments: [
+						{
+							name: "David",
+							text: "Ensure you review before merging",
+							id: fetchID(),
+						},
+					],
+				},
+			],
+		},
+		completed: {
+			title: "completed",
+			items: [
+				{
+					id: fetchID(),
+					title: "Create technical contents",
+					comments: [
+						{
+							name: "Dima",
+							text: "Make sure you check the requirements",
+							id: fetchID(),
+						},
+					],
+				},
+			],
+		},
+		inDevelopment: {
+			title: "indevelopment",
+			items: [
+				{
+					id: fetchID(),
+					title: "Catelina update",
+					comments: [
+						{
+							name: "SomeThing ",
+							text: "Someone",
+							id: fetchID(),
+						},
+					],
+				},
+			],
+		},
+		liveInBuild: {
+			title: "liveinbuild",
+			items: [
+				{
+					id: fetchID(),
+					title: "Catelina live in build",
+					comments: [
+						{
+							name: "SomeThing live in build ",
+							text: "Someone live in build ",
+							id: fetchID(),
+						},
+					],
+				},
+			],
+		},
+	};
+
 
 
 	const [data, setData] = useState()
 	const tempTasks = []
-	const [tasks, setTasks] = useState([])
+	// const [tasks, setTasks] = useState([])
 
 	const pendingObject = {
 		title: "pending",
@@ -93,33 +171,39 @@ const TasksContainer = () => {
 		// });
 	};
 
-	const fetchTasks = async () => {
-		const result = await axios.get('http://localhost:4000/')
-		setData(result?.data)
-	}
+	// const fetchTasks = async () => {
+	// 	const result = await axios.get('http://localhost:4000/')
+	// 	setData(result?.data)
+	// }
 
-	useEffect(() => {
-		fetchTasks();
-	}, []);
 
-	useEffect(() => {
-		if (data) {
-			const pending = data?.filter(task => task.title === "pending");
-			const onGoing = data?.filter(task => task.title === "ongoing");
-			const completed = data?.filter(task => task.title === "completed");
+	// useEffect(() => {
+	// 	fetchTask();
 
-			pending.forEach(task => pendingObject.items.push(task.items))
-			onGoing.forEach(task => onGoingObject.items.push(task.items))
-			completed.forEach(task => completedObject.items.push(task.items))
+	// }, []);
 
-			pendingArray.push(pendingObject)
-			onGoingArray.push(onGoingObject)
-			completedArray.push(completedObject)
-			tempTasks.push(pendingArray, onGoingArray, completedArray)
-		}
-		setTasks(tempTasks)
+	// useEffect(() => {
+	// 	console.log(!data);
+	// 	if (data) {
+	// 		const pending = data?.filter(task => task.title === "pending");
+	// 		const onGoing = data?.filter(task => task.title === "ongoing");
+	// 		const completed = data?.filter(task => task.title === "completed");
 
-	}, [data])
+	// 		pending.forEach(task => pendingObject.items.push(task.items))
+	// 		onGoing.forEach(task => onGoingObject.items.push(task.items))
+	// 		completed.forEach(task => completedObject.items.push(task.items))
+
+	// 		pendingArray.push(pendingObject)
+	// 		onGoingArray.push(onGoingObject)
+	// 		completedArray.push(completedObject)
+	// 		tempTasks.push(pendingArray, onGoingArray, completedArray)
+
+	// 	}
+	// 	console.log("tempTasks: ", tempTasks);
+	// 	setTasks(tempTasks)
+
+
+	// }, [data])
 
 	const value = {
 		pending: {
@@ -166,14 +250,14 @@ const TasksContainer = () => {
 		// },
 	}
 
-	console.log('object', Object.entries(value))
+	// console.log('object', Object.entries(value))
 
-	console.log(22222, tasks)
+	// console.log(22222, tasks)
 
 	return (
 		<div className='container'>
 			<DragDropContext onDragEnd={handleDragEnd}>
-				{tasks.map((task) => (
+				{Object.entries(tasks).map((task) => (
 					<div
 						className={`${task[1].title.toLowerCase()}__wrapper`}
 						key={task[1].title}
@@ -215,9 +299,11 @@ const TasksContainer = () => {
 									</div>
 								)}
 							</Droppable>
-							<div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-								<AddTask onClick={openModal} />
-							</div>
+
+						</div>
+
+						<div className="addTask">
+							<AddTask onClick={openModal} />
 						</div>
 					</div>
 
@@ -238,7 +324,7 @@ const TasksContainer = () => {
 						<TextField name="title"  {...register("title", { required: true })} style={{ width: '100%' }} />
 					</div>
 					{errors.title && <span className="errorMessage">This field is required</span>}
-
+																
 					<div className="formInline">
 						<label className="label">Status</label><br />
 						{/* <input type="" {...register("status", { required: true })} /> */}
