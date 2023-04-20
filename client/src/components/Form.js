@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { Autocomplete, TextField } from '@mui/material'
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-
 import { deviceData } from '../data/data'
 
 const customStyles = {
