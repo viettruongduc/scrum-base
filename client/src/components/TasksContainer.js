@@ -108,7 +108,7 @@ const TasksContainer = () => {
 						className={`${task[1].title.toLowerCase()}__wrapper`}
 						key={task[1].title}
 					>
-						<h3>{task[1].title} Tasks</h3>
+						<h3>{task[1].title} Task</h3>
 						<div className={`${task[1].title.toLowerCase()}__container`}>
 							<Droppable droppableId={task[1].title}>
 								{(provided) => (
