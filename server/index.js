@@ -1,31 +1,13 @@
 const express = require('express');
 const path = require('path');
 const app = express();
+const cors = require('cors');
 const PORT = 4000;
-
-const TaskController = require('./src/app/controllers/TaskController')
+require('dotenv').config();
 
 const Task = require('./src/app/models/Task');
 
-// Add headers before the routes are defined
-app.use(function (req, res, next) {
-
-	// Website you wish to allow to connect
-	res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
-
-	// Request methods you wish to allow
-	res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
-
-	// Request headers you wish to allow
-	res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
-
-	// Set to true if you need the website to include cookies in the requests sent
-	// to the API (e.g. in case you use sessions)
-	res.setHeader('Access-Control-Allow-Credentials', true);
-
-	// Pass to next layer of middleware
-	next();
-});
+app.use(cors());
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -38,12 +20,9 @@ app.listen(PORT, () => {
 	console.log(`Example app listening on PORT ${PORT}`)
 })
 
-// app.get('/', TaskController.index)
-
 app.get("/", async (req, res) => {
 	try {
 		const tasks = await Task.find();
-		// await tasks.forEach(console.log);
 		res.send(tasks);
 	} catch (err) {
 		console.log(err);
@@ -52,15 +31,28 @@ app.get("/", async (req, res) => {
 
 app.post("/", async (req, res) => {
 	const fetchID = () => Math.random().toString(36).substring(2, 10);
-	const body = req.body;
+	const data = req.body.data
+	const index = fetchID()
 	let result = await Task.create({
-		id: fetchID(),
-		title: 'completed',
+		id: index,
+		title: data.status,
 		items: {
-			id: fetchID(),
-			title: 'login page',
+			id: index,
+			title: data.title,
+			link: data.link,
+			label: data.label,
+			device: data.device,
+			deadline: data.deadline,
 		},
 	})
 	res.send(result).status(204);
 });
 
+app.patch("/", async (req, res) => {
+	try {
+		const { body } = req;
+		await Task.updateOne({ id: body.id }, { title: body.title }).exec()
+	} catch (err) {
+		console.log(err);
+	}
+});
