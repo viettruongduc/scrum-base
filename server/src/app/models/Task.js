@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema;
-const ObjectId = Schema.ObjectId;
 
 const TaskSchema = new Schema({
   id: String,
@@ -8,14 +7,16 @@ const TaskSchema = new Schema({
   items: {
     id: String,
     title: String,
+    link: String,
+    device: String,
+    deadline: String,
+    label: String,
   },
   date: Date
 });
 
-// module.exports = mongoose.model('Task', Task)
 
-
-const taskDB = mongoose.createConnection('mongodb+srv://task-management:mBpbpR0oFvshoghP@task-management.yrlbnwg.mongodb.net/?retryWrites=true&w=majority').useDb('task-management')
-const Task = taskDB.model('Task', TaskSchema, 'task')
+const taskDB = mongoose.createConnection(process.env.ATLAS_URI).useDb(process.env.DB_NAME)
+const Task = taskDB.model('Task', TaskSchema, process.env.COLLECTION_NAME)
 
 module.exports = Task
