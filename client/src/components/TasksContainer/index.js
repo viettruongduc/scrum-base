@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from "react"
 import axios from "axios"
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
-
-import AddTask from "./AddTask"
-import Form from "./Form"
+import Form from "../Form"
+import Loading from "../Loading"
 
 const baseURL = process.env.REACT_APP_BASE_URL
 
 const TasksContainer = () => {
+	const [isLoading, setIsLoading] = useState(true);
 	const [modalIsOpen, setIsOpen] = useState(false)
 	const [data, setData] = useState()
 	const tempTasks = []
@@ -77,11 +77,14 @@ const TasksContainer = () => {
 
 	useEffect(() => {
 		if (data) {
-			const pending = data?.filter(task => task.title === "pending")
-			const onGoing = data?.filter(task => task.title === "ongoing")
-			const completed = data?.filter(task => task.title === "completed")
-			const inDevelopment = data?.filter(task => task.title === "inDevelopment")
-			const liveInBuild = data?.filter(task => task.title === "liveInBuild")
+			// set loading to false 
+			setIsLoading(false)
+
+			const pending = data?.filter(task => task.status === "pending")
+			const onGoing = data?.filter(task => task.status === "ongoing")
+			const completed = data?.filter(task => task.status === "completed")
+			const inDevelopment = data?.filter(task => task.status === "inDevelopment")
+			const liveInBuild = data?.filter(task => task.status === "liveInBuild")
 
 			pending.forEach(task => pendingObject.items.push(task.items))
 			onGoing.forEach(task => onGoingObject.items.push(task.items))
@@ -102,7 +105,7 @@ const TasksContainer = () => {
 
 	return (
 		<div className='container'>
-			<DragDropContext onDragEnd={handleDragEnd}>
+			{isLoading ? <Loading /> : <DragDropContext onDragEnd={handleDragEnd}>
 				{tasks?.map((task) => (
 					<div
 						className={`${task[1].title.toLowerCase()}__wrapper`}
@@ -148,13 +151,13 @@ const TasksContainer = () => {
 								)}
 							</Droppable>
 							<div className="addTaskWrapper">
-								<AddTask onClick={() => onAddTask(task[1].title)} />
+								<button className='btnCreate' onClick={() => onAddTask(task[1].title)}>+</button>
 							</div>
 						</div>
 					</div>
 
 				))}
-			</DragDropContext>
+			</DragDropContext>}
 			<Form
 				modalIsOpen={modalIsOpen}
 				onRequestClose={closeModal}

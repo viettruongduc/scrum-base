@@ -1,0 +1,33 @@
+.modalCreate {
+  position: absolute;
+  inset: 50% auto auto 50%;
+  border: 1px solid rgb(204, 204, 204);
+  background: rgb(255, 255, 255);
+  overflow: auto;
+  border-radius: 20px;
+  outline: none;
+  padding: 20px;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
+  width: 800px;
+
+  .formInline {
+    display: flex;
+    margin-top: 20px;
+
+    .labelCustom {
+      margin-left: 10px;
+      margin-top: 15px;
+      width: 60px;
+    }
+  }
+
+  .buttonWrapper {
+    display: flex;
+    justify-content: center;
+
+    .cancelButton {
+      background-color: #72747c !important;
+    }
+  }
+}
