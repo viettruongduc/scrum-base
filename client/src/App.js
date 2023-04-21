@@ -1,5 +1,5 @@
-import { Route, Routes } from "react-router-dom";
-import Task from "./components/Task";
+import { Route, Routes } from "react-router-dom"
+import Task from "./components/Task"
 
 function App() {
 	return (

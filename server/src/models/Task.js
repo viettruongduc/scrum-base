@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const TaskSchema = new Schema({
   id: String,
-  title: String,
+  status: String,
   items: {
     id: String,
     title: String,
@@ -16,7 +16,6 @@ const TaskSchema = new Schema({
 });
 
 
-const taskDB = mongoose.createConnection(process.env.ATLAS_URI).useDb(process.env.DB_NAME)
-const Task = taskDB.model('Task', TaskSchema, process.env.COLLECTION_NAME)
+const Task = mongoose.model('Task', TaskSchema, 'task')
 
 module.exports = Task
